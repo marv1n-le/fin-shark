@@ -1,4 +1,6 @@
 using FinShark.Data;
+using FinShark.Interfaces;
+using FinShark.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace FinShark;
@@ -16,11 +18,16 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+        });
         builder.Services.AddDbContext<AppDbContext>(options =>
         {
             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
         });
-
+        builder.Services.AddScoped<IStockRepository, StockRepository>();
+        builder.Services.AddScoped<ICommentRepository, CommentRepository>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -35,7 +42,7 @@ public class Program
         app.UseAuthorization();
 
         app.MapControllers();
-        
+
         app.Run();
     }
 }

@@ -1,6 +1,4 @@
-using FinShark.Models;
-
-namespace FinShark.DTOs.RequestDTO;
+namespace FinShark.DTOs.ResponseDTO;
 
 public class StockDTO
 {
@@ -11,4 +9,5 @@ public class StockDTO
     public decimal LastDividend { get; set; }
     public string Industry { get; set; }
     public long MarketCap { get; set; }
+    public List<CommentResponseDto> Comments { get; set; } 
 }

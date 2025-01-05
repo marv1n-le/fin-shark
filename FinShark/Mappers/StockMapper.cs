@@ -1,4 +1,5 @@
 using FinShark.DTOs.RequestDTO;
+using FinShark.DTOs.ResponseDTO;
 using FinShark.Models;
 
 namespace FinShark.Mappers;
@@ -15,7 +16,8 @@ public static class StockMapper
             Purchase = stockMapperModel.Purchase,
             LastDividend = stockMapperModel.LastDividend,
             Industry = stockMapperModel.Industry,
-            MarketCap = stockMapperModel.MarketCap
+            MarketCap = stockMapperModel.MarketCap,
+            Comments = stockMapperModel.Comments.Select(c => c.ToCommentDto()).ToList()
         };
     }
 
@@ -31,5 +33,7 @@ public static class StockMapper
             MarketCap = createStockRequestDto.MarketCap
         };
     }
+    
+    
 
 }
