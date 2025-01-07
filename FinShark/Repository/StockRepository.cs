@@ -1,5 +1,6 @@
 using FinShark.Data;
 using FinShark.DTOs.RequestDTO;
+using FinShark.Helpers;
 using FinShark.Interfaces;
 using FinShark.Models;
 using Microsoft.EntityFrameworkCore;
@@ -15,9 +16,19 @@ public class StockRepository : IStockRepository
         _context = context;
     }
     
-    public async Task<List<Stock>> GetAllStocks()
+    public async Task<List<Stock>> GetAllStocks(QueryObject query)
     {
-        return await _context.Stocks.Include(c => c.Comments).ToListAsync();
+        var stock = _context.Stocks.Include(c => c.Comments).AsQueryable();
+        if (!string.IsNullOrWhiteSpace(query.CompanyName))
+        {
+            stock = stock.Where(x => x.CompanyName.Contains(query.CompanyName));
+        }
+        if (!string.IsNullOrWhiteSpace(query.Symbol))
+        {
+            stock = stock.Where(x => x.Symbol.Contains(query.Symbol));
+        }
+
+        return await stock.ToListAsync();
     }
 
     public async Task<Stock?> GetById(int id)
