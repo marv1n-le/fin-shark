@@ -32,11 +32,13 @@ public class StockRepository : IStockRepository
         {
             if (query.SortBy.Equals("Symbol", StringComparison.OrdinalIgnoreCase))   
             {
-                stock = query.IsSortAscending ? stock.OrderByDescending(s => s.Symbol) : stock.OrderBy(s => s.Symbol);                    
+                stock = query.IsSortAscending ? stock.OrderByDescending(s => s.Symbol) : stock. OrderBy(s => s.Symbol);                    
             }
         }
+        
+        var skip = query.PageSize * (query.Page - 1);
 
-        return await stock.ToListAsync();
+        return await stock.Skip(skip).Take(query.PageSize).ToListAsync();
     }
 
     public async Task<Stock?> GetById(int id)
